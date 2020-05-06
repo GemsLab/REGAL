@@ -1,6 +1,23 @@
 This repository contains a Python implementation of methods presented in the following paper:
+
 Mark Heimann, Haoming Shen, Tara Safavi, and Danai Koutra. "REGAL: Representation Learning-based Graph Alignment." International Conference on Information and Knowledge Management (CIKM), 2018.
+
 Please consider citing this paper if you find the code helpful. 
+```bibtex
+@inproceedings{DBLP:conf/cikm/HeimannSSK18,
+  author    = {Mark Heimann and
+               Haoming Shen and
+               Tara Safavi and
+               Danai Koutra},
+  title     = {{REGAL:} Representation Learning-based Graph Alignment},
+  booktitle = {Proceedings of the 27th {ACM} International Conference on Information
+               and Knowledge Management, {CIKM} 2018, Torino, Italy, October 22-26,
+               2018},
+  pages     = {117--126},
+  publisher = {{ACM}},
+  year      = {2018},
+}
+```
 
 Included is code for REGAL, our node embedding framework for network alignment, and its component node embedding method xNetMF.   
 This is only a reference implementation; without doubt it can be much improved, but we hope it is helpful!
