@@ -1,6 +1,8 @@
 This repository contains a Python implementation of methods presented in the following paper:
 
-Mark Heimann, Haoming Shen, Tara Safavi, and Danai Koutra. "REGAL: Representation Learning-based Graph Alignment." International Conference on Information and Knowledge Management (CIKM), 2018.
+Mark Heimann, Haoming Shen, Tara Safavi, and Danai Koutra. *REGAL: Representation Learning-based Graph Alignment*. International Conference on Information and Knowledge Management (CIKM), 2018.
+
+*Paper*: https://gemslab.github.io/papers/heimann-2018-regal.pdf
 
 Please consider citing this paper if you find the code helpful. 
 ```bibtex
