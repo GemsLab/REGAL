@@ -28,6 +28,7 @@ This is only a reference implementation; without doubt it can be much improved, 
 DEPENDENCIES
 =======================
 numpy, scipy, networkx (all may be installed with pip)
+Tested with Python 3.8.5 and Python 2.7.16
 
 EXAMPLE
 =======================
