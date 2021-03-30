@@ -52,31 +52,33 @@ def main(args):
 
 	#Get true alignments
 	true_alignments_fname = args.input.split("_")[0] + "_edges-mapping-permutation.txt" #can be changed if desired
-	print "true alignments file: ", true_alignments_fname
+	print("true alignments file: ", true_alignments_fname)
 	true_alignments = None
 	if os.path.exists(true_alignments_fname):
 		with open(true_alignments_fname, "rb") as true_alignments_file:
-			true_alignments = pickle.load(true_alignments_file)
+			try:
+				true_alignments = pickle.load(true_alignments_file)
+			except:
+				true_alignments = pickle.load(true_alignments_file, encoding = "latin1")
 
 	#Load in attributes if desired (assumes they are numpy array)
 	if args.attributes is not None:
 		args.attributes = np.load(args.attributes) #load vector of attributes in from file
-		print args.attributes.shape
+		print(args.attributes.shape)
 
 	#Learn embeddings and save to output
-	print "learning representations..."
+	print("learning representations...")
 	before_rep = time.time()
-	learn_representations(args)
+	embed = learn_representations(args)
+	print(embed)
 	after_rep = time.time()
 	print("Learned representations in %f seconds" % (after_rep - before_rep))
 
-	#Score alignments learned from embeddings
-	embed = np.load(args.output)
 	emb1, emb2 = get_embeddings(embed)
 	before_align = time.time()
 	if args.numtop == 0:
 		args.numtop = None
-	alignment_matrix = get_embedding_similarities(emb1, emb2, num_top = args.numtop)
+	alignment_matrix = get_embedding_similarities(emb1, emb2, num_top = None)#args.numtop)
 
 	#Report scoring and timing
 	after_align = time.time()
@@ -84,7 +86,7 @@ def main(args):
 	print("Align time: "), total_time
 
 	if true_alignments is not None:
-		topk_scores = [1,5,10,20,50]
+		topk_scores = [1]#,5,10,20,50]
 		for k in topk_scores:
 			score, correct_nodes = score_alignment_matrix(alignment_matrix, topk = k, true_alignments = true_alignments)
 			print("score top%d: %f" % (k, score))
@@ -93,9 +95,9 @@ def main(args):
 #Should save representations to args.output
 def learn_representations(args):
 	nx_graph = nx.read_edgelist(args.input, nodetype = int, comments="%")
-	print "read in graph"
-	adj = nx.adjacency_matrix(nx_graph)#.todense()
-	print "got adj matrix"
+	print("read in graph")
+	adj = nx.adjacency_matrix(nx_graph, nodelist = range(nx_graph.number_of_nodes()) )
+	print("got adj matrix")
 	
 	graph = Graph(adj, node_attributes = args.attributes)
 	max_layer = args.untillayer
@@ -116,8 +118,8 @@ def learn_representations(args):
 		max_layer = 1000
 	print("Learning representations with max layer %d and alpha = %f" % (max_layer, alpha))
 	representations = xnetmf.get_representations(graph, rep_method)
-	pickle.dump(representations, open(args.output, "w"))
-		
+	np.save(args.output, representations)
+	return representations		
 
 if __name__ == "__main__":
 	args = parse_args()

@@ -104,9 +104,9 @@ def get_features(graph, rep_method, verbose = True):
 	graph.khop_neighbors = khop_neighbors_nobfs
 	
 	if verbose:
-		print "max degree: ", graph.max_degree
+		print("max degree: ", graph.max_degree)
 		after_khop = time.time()
-		print "got k hop neighbors in time: ", after_khop - before_khop
+		print("got k hop neighbors in time: ", after_khop - before_khop)
 
 	G_adj = graph.G_adj
 	num_nodes = G_adj.shape[0]
@@ -127,7 +127,7 @@ def get_features(graph, rep_method, verbose = True):
 	after_degseqs = time.time() 
 
 	if verbose:
-		print "got degree sequences in time: ", after_degseqs - before_degseqs
+		print("got degree sequences in time: ", after_degseqs - before_degseqs)
 
 	return feature_matrix
 
@@ -147,7 +147,7 @@ def compute_similarity(graph, rep_method, vec1, vec2, node_attributes = None, no
 #Output: np array of node IDs
 def get_sample_nodes(graph, rep_method, verbose = True):
 	#Sample uniformly at random
-	sample = np.random.permutation(np.arange(graph.N))[:rep_method.p]
+	sample = np.random.RandomState(seed=42).permutation((np.arange(graph.N)))[:rep_method.p]
 	return sample
 
 #Get dimensionality of learned representations
@@ -157,7 +157,7 @@ def get_sample_nodes(graph, rep_method, verbose = True):
 def get_feature_dimensionality(graph, rep_method, verbose = True):
 	p = int(rep_method.k*math.log(graph.N, 2)) #k*log(n) -- user can set k, default 10
 	if verbose:
-		print "feature dimensionality is ", min(p, graph.N)
+		print("feature dimensionality is ", min(p, graph.N))
 	rep_method.p = min(p,graph.N)  #don't return larger dimensionality than # of nodes
 	return rep_method.p
 
@@ -171,7 +171,7 @@ def get_representations(graph, rep_method, verbose = True):
 	if rep_method.p is None:
 		rep_method.p = get_feature_dimensionality(graph, rep_method, verbose = verbose) #k*log(n), where k = 10
 	elif rep_method.p > graph.N: 
-		print "Warning: dimensionality greater than number of nodes. Reducing to n"
+		print("Warning: dimensionality greater than number of nodes. Reducing to n")
 		rep_method.p = graph.N
 	landmarks = get_sample_nodes(graph, rep_method, verbose = verbose)
 
@@ -197,7 +197,7 @@ def get_representations(graph, rep_method, verbose = True):
 	reprsn = np.dot(C, Wfac)
 	after_computerep = time.time()
 	if verbose:
-		print "computed representation in time: ", after_computerep - before_computerep
+		print("computed representation in time: ", after_computerep - before_computerep)
 
 	#Post-processing step to normalize embeddings (true by default, for use with REGAL)
 	if rep_method.normalize:
@@ -217,7 +217,7 @@ if __name__ == "__main__":
 	graph = Graph(adj_matrix)
 	rep_method = RepMethod(max_layer = 2) #Learn representations with xNetMF.  Can adjust parameters (e.g. as in REGAL)
 	representations = get_representations(graph, rep_method)
-	print representations.shape
+	print(representations.shape)
 
 
 
